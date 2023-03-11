@@ -6,14 +6,22 @@ import { Button, Form } from 'react-bootstrap'
 function App() {
 
   const model = "gpt-3.5-turbo";
-  const API_KEY = process.env.REACT_APP_API_KEY;
-
+ 
+  const storageApiKey = localStorage.getItem("apiKey") || '';
+  
   const [input, setInput] = useState("");
+  const [apiKey, setApiKey] = useState(storageApiKey);
   const [completedSentence, setCompletedSentence] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showApiKey, setShowApiKey] = useState(false);
+
+  const handleApiKeyChange = (event : any) => {
+    setApiKey(event.target.value);
+    localStorage.setItem("apiKey", event.target.value);
+  };
 
   async function handleSubmit() {
-      if (!API_KEY) {
+      if (!apiKey) {
         setCompletedSentence("API KEY NOT SET!");
       }
       else {
@@ -22,7 +30,8 @@ function App() {
           setCompletedSentence(completedSentence);
         }
         catch (error : any) {
-        setCompletedSentence(error.message);
+          setLoading(false);
+          setCompletedSentence(error.message);
       }
     }
   }
@@ -43,7 +52,7 @@ function App() {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${API_KEY}`,
+          Authorization: `Bearer ${apiKey}`,
         },
       }
     );
@@ -59,16 +68,40 @@ function App() {
     }
   }
 
+  const onShowApiKey = () => {
+    setShowApiKey(!showApiKey);
+  }
+  
   return (
     <div className="ms-4">
-      <h2 className="mt-4 mb-4">OpenAI (ChatGPT) - Ask me a question</h2>
-      <Form.Control
-          style={{ width: '1000px' }}
-          type="text"
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-          onKeyDown={onKeyDown}
-       />     
+        <h2 className="mt-2">OpenAI (ChatGPT) - Ask me a question</h2>
+        <p className="mb-4"><small>v1.0.2</small></p>
+        <div className="form-check form-switch mt-2">
+            <input className="form-check-input" type="checkbox" onClick={onShowApiKey} />
+            <label className="form-check-label">Show API Key</label>
+        </div>
+        {showApiKey && (
+          <div className="form-group">
+            <input className="form-control"
+                      style={{ width: '1000px' }}
+                      id="apiKeyInput"
+                      type="text"
+                      value={apiKey}
+                      onChange={handleApiKeyChange} />
+            <small className="form-text text-muted">API Key is only stored in your browser and is not visible by anyone else</small>
+          </div>
+        )}
+        <div className="form-group mt-4">
+          <label className="mb-2">My Question</label>
+          <Form.Control
+              style={{ width: '1000px' }}
+              type="text"
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              onKeyDown={onKeyDown}
+          /> 
+        </div>
+   
       <Button className="mt-4 mb-2" onClick={handleSubmit}>Answer my question</Button>
       <pre style={{ whiteSpace: 'pre-wrap' }}>{completedSentence}</pre>
 
