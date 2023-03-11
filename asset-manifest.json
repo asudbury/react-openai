@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/react-openai/static/css/main.c2cab247.css",
-    "main.js": "/react-openai/static/js/main.dce06c60.js",
+    "main.js": "/react-openai/static/js/main.5d2f3e2a.js",
     "index.html": "/react-openai/index.html",
     "main.c2cab247.css.map": "/react-openai/static/css/main.c2cab247.css.map",
-    "main.dce06c60.js.map": "/react-openai/static/js/main.dce06c60.js.map"
+    "main.5d2f3e2a.js.map": "/react-openai/static/js/main.5d2f3e2a.js.map"
   },
   "entrypoints": [
     "static/css/main.c2cab247.css",
-    "static/js/main.dce06c60.js"
+    "static/js/main.5d2f3e2a.js"
   ]
 }
